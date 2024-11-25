@@ -2,6 +2,7 @@ package it.unibo.oop.lab.lambda;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -57,11 +58,18 @@ public final class LambdaUtilities {
      *         value only if the predicate passes, and an Empty optional
      *         otherwise.
      */
+
     public static <T> List<Optional<T>> optFilter(final List<T> list, final Predicate<T> pre) {
         /*
          * Suggestion: consider Optional.filter
          */
-        return null;
+        final List<Optional<T>> newList = new ArrayList<>();
+        try{
+            list.forEach(t -> newList.add(Optional.of(t).filter(pre)));
+        } catch (NullPointerException  e) {
+            System.out.println("The predicate is null");
+        }
+        return newList;
     }
 
     /**
@@ -80,7 +88,16 @@ public final class LambdaUtilities {
         /*
          * Suggestion: consider Map.merge
          */
-        return null;
+        final  Map<R,Set<T>> newMap = new HashMap<>();
+        try {
+            list.forEach(t ->{
+                newMap.merge(op.apply(t), new HashSet<>(Set.of(t)), (Set<T> oldt, Set<T> newt) -> {oldt.addAll(newt);return oldt;} );
+             });
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        
+        return newMap;
     }
 
     /**
