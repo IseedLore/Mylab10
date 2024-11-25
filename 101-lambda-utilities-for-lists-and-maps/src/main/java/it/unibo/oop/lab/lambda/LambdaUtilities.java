@@ -64,11 +64,7 @@ public final class LambdaUtilities {
          * Suggestion: consider Optional.filter
          */
         final List<Optional<T>> newList = new ArrayList<>();
-        try{
-            list.forEach(t -> newList.add(Optional.of(t).filter(pre)));
-        } catch (NullPointerException  e) {
-            System.out.println("The predicate is null");
-        }
+        list.forEach(t -> newList.add(Optional.of(t).filter(pre)));
         return newList;
     }
 
@@ -88,14 +84,15 @@ public final class LambdaUtilities {
         /*
          * Suggestion: consider Map.merge
          */
-        final  Map<R,Set<T>> newMap = new HashMap<>();
-        try {
-            list.forEach(t ->{
-                newMap.merge(op.apply(t), new HashSet<>(Set.of(t)), (Set<T> oldt, Set<T> newt) -> {oldt.addAll(newt);return oldt;} );
-             });
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-        }
+        final  Map<R, Set<T>> newMap = new HashMap<>();
+        list.forEach(t -> {
+            newMap.merge(
+                op.apply(t), 
+                new HashSet<>(Set.of(t)), 
+                (Set<T> oldt, Set<T> newt) -> {
+                    oldt.addAll(newt); return oldt; }
+            );
+        });
         return newMap;
     }
 
@@ -117,12 +114,8 @@ public final class LambdaUtilities {
          *
          * Keep in mind that a map can be iterated through its forEach method
          */
-        final  Map<K,V> newMap = new HashMap<>();
-        try {
-            map.forEach((key,value) -> newMap.put(key, value.orElse(def.get())));
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-        }
+        final  Map<K, V> newMap = new HashMap<>();
+        map.forEach((key, value) -> newMap.put(key, value.orElse(def.get())));
         return newMap;
     }
 
@@ -132,7 +125,7 @@ public final class LambdaUtilities {
      */
     @SuppressWarnings("PMD.SystemPrintln")
     public static void main(final String[] args) {
-        final List<Integer> li = IntStream.range(1, 8).mapToObj(i -> Integer.valueOf(i)).collect(Collectors.toList());
+        final List<Integer> li = IntStream.range(1, 8).mapToObj(Integer::valueOf).collect(Collectors.toList());
         System.out.println(dup(li, x -> x + 100));
         /*
          * [1, 101, 2, 102, 3, 103, 4, 104, 5, 105, 6, 106, 7, 107]
