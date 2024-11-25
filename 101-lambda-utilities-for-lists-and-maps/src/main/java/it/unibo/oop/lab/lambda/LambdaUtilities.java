@@ -96,7 +96,6 @@ public final class LambdaUtilities {
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
-        
         return newMap;
     }
 
@@ -118,7 +117,13 @@ public final class LambdaUtilities {
          *
          * Keep in mind that a map can be iterated through its forEach method
          */
-        return null;
+        final  Map<K,V> newMap = new HashMap<>();
+        try {
+            map.forEach((key,value) -> newMap.put(key, value.orElse(def.get())));
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return newMap;
     }
 
     /**
